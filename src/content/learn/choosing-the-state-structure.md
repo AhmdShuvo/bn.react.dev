@@ -4,50 +4,50 @@ title: State-এর Structure নির্বাচন
 
 <Intro>
 
-Structuring state well can make a difference between a component that is pleasant to modify and debug, and one that is a constant source of bugs. Here are some tips you should consider when structuring state.
+ভালভাবে State Structuring পার্থক্য করতে পারে যা পরিবর্তন এবং Debug করার জন্য সুবিধাজনক, এবং যেটি bug-এর একটি  উৎস এই রকম দুইটি Component এর মধ্যে। State Structuring করার সময় এই টিপসগুলো আপনার বিবেচনা করা উচিত।
 
 </Intro>
 
 <YouWillLearn>
 
-* When to use a single vs multiple state variables
-* What to avoid when organizing state
-* How to fix common issues with the state structure
+* কখন একটি একক এবং একাধিক State variable ব্যবহার করতে হবে
+* State গঠন করার সময় কি এড়াতে হবে
+* State Structure করার সময় সাধারণ সমস্যাগুলি কীভাবে সমাধান করা যায়
 
 </YouWillLearn>
 
-## Principles for structuring state {/*principles-for-structuring-state*/}
+## State গঠনের নীতি {/*principles-for-structuring-state*/}
 
-When you write a component that holds some state, you'll have to make choices about how many state variables to use and what the shape of their data should be. While it's possible to write correct programs even with a suboptimal state structure, there are a few principles that can guide you to make better choices:
+যখন আপনি একটি কম্পোনেন্ট লেখেন যা কিছু স্টেট ধারণ করে, তখন আপনাকে কতগুলি স্টেট ভেরিয়েবল ব্যবহার করতে হবে এবং তাদের ডেটার আকৃতি কেমন হওয়া উচিত সে সম্পর্কে সিদ্ধান্ত নিতে হবে। যদিও একটি suboptimal state structure-এর সাথেও সঠিক প্রোগ্রাম লেখা সম্ভব, তবে কিছু নীতি রয়েছে যা আপনাকে আরও ভাল পছন্দ করতে গাইড করতে পারে:
 
-1. **Group related state.** If you always update two or more state variables at the same time, consider merging them into a single state variable.
-2. **Avoid contradictions in state.** When the state is structured in a way that several pieces of state may contradict and "disagree" with each other, you leave room for mistakes. Try to avoid this.
-3. **Avoid redundant state.** If you can calculate some information from the component's props or its existing state variables during rendering, you should not put that information into that component's state.
-4. **Avoid duplication in state.** When the same data is duplicated between multiple state variables, or within nested objects, it is difficult to keep them in sync. Reduce duplication when you can.
-5. **Avoid deeply nested state.** Deeply hierarchical state is not very convenient to update. When possible, prefer to structure state in a flat way.
+1. **গ্রুপ সম্পর্কিত State.** আপনি যদি সবসময় একই সময়ে দুই বা তার বেশি স্টেট ভেরিয়েবল আপডেট করেন, তাহলে সেগুলিকে একক স্টেট ভেরিয়েবলে মার্জ করার কথা বিবেচনা করতে পারেন।
+2. **Sate -এ দ্বন্দ্ব এড়িয়ে চলুন।** যখন State এমনভাবে গঠিত হয় যাতে State-এর বিভিন্ন অংশ একে অপরের সাথে বিরোধিতা এবং "অসম্মত" হতে পারে এবং আপনি ভুলের জন্য জায়গা ছেড়ে দেন। এটি এড়ানোর চেষ্টা করুন।
+3. **অপ্রয়োজনীয় State এড়িয়ে চলুন।** আপনি যদি রেন্ডারিংয়ের সময় কম্পোনেন্টের Props বা এর বিদ্যমান State ভেরিয়েবল থেকে কিছু তথ্য পেতে পারেন, তাহলে আপনার সেই তথ্য সেই কম্পোনেন্টের স্টেটে রাখা উচিত নয়।
+4. **State-এ ডুপ্লিকেশন এড়িয়ে চলুন।** যখন একই ডেটা একাধিক স্টেট ভেরিয়েবলের মধ্যে বা নেস্টেড অবজেক্টের মধ্যে ডুপ্লিকেট করা হয়, তখন সেগুলিকে সিঙ্কে রাখা কঠিন। আপনি যখন পারেন ডুপ্লিকেশন হ্রাস করুন.
+5. **ডিপলি নেস্টেড state এড়িয়ে চলুন।** ডিপলি হাইয়ারর্কিক্যাল স্টেট আপডেট করা খুব একটা সুবিধাজনক নয়। যখন সম্ভব, একটি সহজ উপায়ে State গঠন করুন।
 
-The goal behind these principles is to *make state easy to update without introducing mistakes*. Removing redundant and duplicate data from state helps ensure that all its pieces stay in sync. This is similar to how a database engineer might want to ["normalize" the database structure](https://docs.microsoft.com/en-us/office/troubleshoot/access/database-normalization-description) to reduce the chance of bugs. To paraphrase Albert Einstein, **"Make your state as simple as it can be--but no simpler."**
+এই নিয়মগুলোর পিছনে লক্ষ্য হল *ভুল না করেই State-কে আপডেট করা সহজ করা*। State থেকে অপ্রয়োজনীয় এবং সদৃশ ডেটা সরানো নিশ্চিত করতে সাহায্য করে যে এর সমস্ত অংশগুলি সিঙ্কে থাকে৷ Bug কমাতে একজন ডাটাবেস engineer যেভাবে ডাটাবেস গঠনকে ["স্বাভাবিক" করতে চান](https://docs.microsoft.com/en-us/office/troubleshoot/access/database-normalization-description) চান তার মতোই।  আলবার্ট আইনস্টাইনকে ব্যাখ্যা করার জন্য, **"আপনার State -কে যতটা সহজ করা যায়---কিন্তু সহজতর নয়।"**
 
-Now let's see how these principles apply in action.
+এখন দেখা যাক কিভাবে এই নিয়মগুলো কীভাবে কাজে লাগানো যায়।
 
-## Group related state {/*group-related-state*/}
+## গ্রুপ সম্পর্কিত State. {/*group-related-state*/}
 
-You might sometimes be unsure between using a single or multiple state variables.
+আপনি কখনও কখনও একটি একক বা একাধিক স্টেট ভেরিয়েবল ব্যবহার করার মধ্যে অনিশ্চিত হতে পারেন।
 
-Should you do this?
+আপনার কি এটা করা উচিত?
 
 ```js
 const [x, setX] = useState(0);
 const [y, setY] = useState(0);
 ```
 
-Or this?
+নাকি এটা?
 
 ```js
 const [position, setPosition] = useState({ x: 0, y: 0 });
 ```
 
-Technically, you can use either of these approaches. But **if some two state variables always change together, it might be a good idea to unify them into a single state variable.** Then you won't forget to always keep them in sync, like in this example where moving the cursor updates both coordinates of the red dot:
+টেকনিক্যালি, আপনি এই পদ্ধতির যেকোনো একটি ব্যবহার করতে পারেন। কিন্তু **যদি কিছু দুটি স্টেট ভেরিয়েবল সবসময় একসাথে পরিবর্তিত হয়, তাহলে তাদের একটি একক স্টেট ভেরিয়েবলে একীভূত করা ভালো উপায় হতে পারে।** তাহলে আপনি সেগুলিকে সবসময় সিঙ্কে রাখতে ভুলবেন না, যেমন এই উদাহরণে কার্সার সরানো হচ্ছে লাল বিন্দুর উভয় coordinates আপডেট করে:
 
 <Sandpack>
 
@@ -93,17 +93,17 @@ body { margin: 0; padding: 0; height: 250px; }
 
 </Sandpack>
 
-Another case where you'll group data into an object or an array is when you don't know how many pieces of state you'll need. For example, it's helpful when you have a form where the user can add custom fields.
+আরেকটি ক্ষেত্রে যেখানে আপনি একটি অবজেক্ট বা অ্যারেতে ডেটা গোষ্ঠীবদ্ধ করবেন যখন আপনি জানেন না যে আপনার কতগুলি স্টেট প্রয়োজন হবে। উদাহরণস্বরূপ, যখন আপনার কাছে একটি ফর্ম থাকে যেখানে ব্যবহারকারী কাস্টম fields যোগ করতে পারে তখন এটি সহায়ক৷
 
 <Pitfall>
 
-If your state variable is an object, remember that [you can't update only one field in it](/learn/updating-objects-in-state) without explicitly copying the other fields. For example, you can't do `setPosition({ x: 100 })` in the above example because it would not have the `y` property at all! Instead, if you wanted to set `x` alone, you would either do `setPosition({ ...position, x: 100 })`, or split them into two state variables and do `setX(100)`.
+যদি আপনার স্টেট ভেরিয়েবলটি একটি অবজেক্ট হয়, তবে মনে রাখবেন যে [আপনি এটিতে শুধুমাত্র একটি ক্ষেত্র আপডেট করতে পারবেন না](/learn/updating-objects-in-state) অন্য ক্ষেত্রগুলিকে স্পষ্টভাবে copy না করে। উদাহরণস্বরূপ, উপরের উদাহরণে আপনি `setPosition({ x: 100 })` করতে পারবেন না কারণ এতে `y` প্রপার্টি আদৌ থাকবে না! পরিবর্তে, আপনি যদি একা `x` সেট করতে চান, আপনি হয় `setPosition({ ...position, x: 100 })` করবেন, অথবা সেগুলোকে দুটি স্টেট ভেরিয়েবলে বিভক্ত করবেন এবং `setX(100)` করবেন।
 
 </Pitfall>
 
-## Avoid contradictions in state {/*avoid-contradictions-in-state*/}
+## Sate -এ দ্বন্দ্ব এড়িয়ে চলুন। {/*avoid-contradictions-in-state*/}
 
-Here is a hotel feedback form with `isSending` and `isSent` state variables:
+এখানে `isSending` এবং `isSent` স্টেট ভেরিয়েবল সহ একটি hotel feedback form রয়েছে:
 
 <Sandpack>
 
@@ -157,9 +157,9 @@ function sendMessage(text) {
 
 </Sandpack>
 
-While this code works, it leaves the door open for "impossible" states. For example, if you forget to call `setIsSent` and `setIsSending` together, you may end up in a situation where both `isSending` and `isSent` are `true` at the same time. The more complex your component is, the harder it is to understand what happened.
+এই কোডটি কাজ করার সময়, এটি "impossible" State-এর দরজা খোলা রাখে। উদাহরণ স্বরূপ, যদি আপনি `setIsSent` এবং `setIsSending` একসাথে কল করতে ভুলে যান, তাহলে আপনি এমন পরিস্থিতিতে পৌছাতে পারেন যেখানে `isSending` এবং `isSent` উভয়ই একই সময়ে `True`। আপনার Component যত জটিল, কী ঘটেছে তা বোঝা তত কঠিন।
 
-**Since `isSending` and `isSent` should never be `true` at the same time, it is better to replace them with one `status` state variable that may take one of *three* valid states:** `'typing'` (initial), `'sending'`, and `'sent'`:
+**যেহেতু `isSending` এবং `isSent` একই সময়ে `True` হওয়া উচিত নয়, তাই তাদের একটি `status` স্টেট ভেরিয়েবল দিয়ে প্রতিস্থাপন করা ভালো যেটি *তিনটি* বৈধ অবস্থার একটি নিতে পারে:** `typing '` (initial), `''sending'`, এবং `'sent'`:
 
 <Sandpack>
 
@@ -214,20 +214,20 @@ function sendMessage(text) {
 
 </Sandpack>
 
-You can still declare some constants for readability:
+আপনি এখনও পঠনযোগ্যতার জন্য কিছু constant declare করতে পারেন:
 
 ```js
 const isSending = status === 'sending';
 const isSent = status === 'sent';
 ```
 
-But they're not state variables, so you don't need to worry about them getting out of sync with each other.
+কিন্তু তারা স্টেট ভেরিয়েবল নয়, তাই তাদের একে অপরের সাথে সিঙ্কের বাইরে চলে যাওয়ার বিষয়ে আপনার চিন্তা করার দরকার নেই।
 
-## Avoid redundant state {/*avoid-redundant-state*/}
+## অপ্রয়োজনীয় State এড়িয়ে চলুন। {/*avoid-redundant-state*/}
 
-If you can calculate some information from the component's props or its existing state variables during rendering, you **should not** put that information into that component's state.
+আপনি যদি রেন্ডারিংয়ের সময় কম্পোনেন্টের প্রপস বা এর বিদ্যমান স্টেট ভেরিয়েবল থেকে কিছু তথ্য পেতে পারেন, তাহলে আপনার সেই তথ্যটিকে সেই উপাদানের অবস্থায় রাখা **উচিৎ নয়**।
 
-For example, take this form. It works, but can you find any redundant state in it?
+উদাহরণস্বরূপ, এই ফর্মটি দেখুন। এটা কাজ করে, কিন্তু আপনি এটি কোন অপ্রয়োজনীয় স্টেট পাবেন?
 
 <Sandpack>
 
@@ -280,9 +280,9 @@ label { display: block; margin-bottom: 5px; }
 
 </Sandpack>
 
-This form has three state variables: `firstName`, `lastName`, and `fullName`. However, `fullName` is redundant. **You can always calculate `fullName` from `firstName` and `lastName` during render, so remove it from state.**
+এই ফর্মটির তিনটি স্টেট ভেরিয়েবল আছে: `firstName`, `lastName`, এবং `fullName`. যাইহোক, `fullName` অপ্রয়োজনীয়। **আপনি সর্বদা রেন্ডারের সময় `firstName` এবং `lastName` থেকে `fullName` পেতে পারেন, তাই এটিকে স্টেট থেকে সরিয়ে দিন।**
 
-This is how you can do it:
+এইভাবে আপনি এটি করতে পারেন:
 
 <Sandpack>
 
@@ -334,37 +334,37 @@ label { display: block; margin-bottom: 5px; }
 
 </Sandpack>
 
-Here, `fullName` is *not* a state variable. Instead, it's calculated during render:
+এখানে, `fullName` একটি স্টেট ভেরিয়েবল *নয়*। পরিবর্তে, এটি রেন্ডারের সময় যুক্ত করা হয়:
 
 ```js
 const fullName = firstName + ' ' + lastName;
 ```
 
-As a result, the change handlers don't need to do anything special to update it. When you call `setFirstName` or `setLastName`, you trigger a re-render, and then the next `fullName` will be calculated from the fresh data.
+ফলস্বরূপ, পরিবর্তন হ্যান্ডলারদের এটি আপডেট করার জন্য বিশেষ কিছু করার দরকার নেই। যখন আপনি `setFirstName` বা `setLastName` কল করেন, আপনি একটি পুনরায় রেন্ডার ট্রিগার করেন এবং তারপরে পরবর্তী `fullName` ফ্রেশ ডেটা থেকে নেওয়া হবে।
 
 <DeepDive>
 
-#### Don't mirror props in state {/*don-t-mirror-props-in-state*/}
+#### স্টেটে প্রপস mirror করবেন না {/*don-t-mirror-props-in-state*/}
 
-A common example of redundant state is code like this:
+অপ্রয়োজনীয় স্টেটের একটি সাধারণ উদাহরণ এইরকম কোড:
 
 ```js
 function Message({ messageColor }) {
   const [color, setColor] = useState(messageColor);
 ```
 
-Here, a `color` state variable is initialized to the `messageColor` prop. The problem is that **if the parent component passes a different value of `messageColor` later (for example, `'red'` instead of `'blue'`), the `color` *state variable* would not be updated!** The state is only initialized during the first render.
+এখানে, একটি `রঙ` স্টেট ভেরিয়েবল `মেসেজ কালার` প্রপে initialize করা হয়েছে। সমস্যা হল **যদি মূল উপাদানটি পরে `messageColor` এর একটি ভিন্ন মান পাস করে (উদাহরণস্বরূপ, `'blue'` এর পরিবর্তে `'red'`), `color` *স্টেট ভেরিয়েবল* আপডেট করা হবে না! ** স্টেটটি শুধুমাত্র প্রথম রেন্ডারের সময় initialize করা হয়।
 
-This is why "mirroring" some prop in a state variable can lead to confusion. Instead, use the `messageColor` prop directly in your code. If you want to give it a shorter name, use a constant:
+এই কারণেই একটি স্টেট ভেরিয়েবলে কিছু প্রপকে "mirroring" করা বিভ্রান্তির কারণ হতে পারে। পরিবর্তে, আপনার কোডে সরাসরি `messageColor` প্রপ ব্যবহার করুন। আপনি যদি এটি একটি ছোট নাম দিতে চান, একটি constant ব্যবহার করুন:
 
 ```js
 function Message({ messageColor }) {
   const color = messageColor;
 ```
 
-This way it won't get out of sync with the prop passed from the parent component.
+এইভাবে এটি parent component থেকে পাস করা প্রপের সাথে সিঙ্ক থেকে বেরিয়ে আসবে না।
 
-"Mirroring" props into state only makes sense when you *want* to ignore all updates for a specific prop. By convention, start the prop name with `initial` or `default` to clarify that its new values are ignored:
+স্টেটে "Mirroring" প্রপস শুধুমাত্র তখনই বোধগম্য হয় যখন আপনি একটি নির্দিষ্ট প্রপের জন্য সমস্ত আপডেট উপেক্ষা করতে * চান। নিয়ম অনুসারে, এর নতুন মানগুলি উপেক্ষা করা হয়েছে তা স্পষ্ট করার জন্য প্রপ নামটি `initial` বা `default` দিয়ে শুরু করুন:
 
 ```js
 function Message({ initialColor }) {
@@ -375,9 +375,9 @@ function Message({ initialColor }) {
 
 </DeepDive>
 
-## Avoid duplication in state {/*avoid-duplication-in-state*/}
+## State-এ ডুপ্লিকেশন এড়িয়ে চলুন। {/*avoid-duplication-in-state*/}
 
-This menu list component lets you choose a single travel snack out of several:
+এই menu list component টি আপনাকে বেশ কয়েকটির মধ্যে একটি একক travel snack বেছে নিতে দেয়:
 
 <Sandpack>
 
@@ -422,9 +422,9 @@ button { margin-top: 10px; }
 
 </Sandpack>
 
-Currently, it stores the selected item as an object in the `selectedItem` state variable. However, this is not great: **the contents of the `selectedItem` is the same object as one of the items inside the `items` list.** This means that the information about the item itself is duplicated in two places.
+বর্তমানে, এটি নির্বাচিত আইটেমটিকে `selectedItem` স্টেট ভেরিয়েবলে একটি অবজেক্ট হিসেবে সংরক্ষণ করে। যাইহোক, এটি দুর্দান্ত নয়: **`selectedItem` এর বিষয়বস্তু `items` তালিকার মধ্যে থাকা আইটেমগুলির একটির মতো একই বস্তু।** এর মানে হল যে আইটেমটি সম্পর্কে তথ্য দুটি জায়গায় ডুপ্লিকেট করা হয়েছে।
 
-Why is this a problem? Let's make each item editable:
+কেন এটি একটি সমস্যা? আসুন প্রতিটি আইটেম editable করা যাক:
 
 <Sandpack>
 
@@ -487,7 +487,7 @@ button { margin-top: 10px; }
 
 </Sandpack>
 
-Notice how if you first click "Choose" on an item and *then* edit it, **the input updates but the label at the bottom does not reflect the edits.** This is because you have duplicated state, and you forgot to update `selectedItem`.
+লক্ষ্য করুন কিভাবে আপনি যদি একটি আইটেমে প্রথমে "Choose" ক্লিক করেন এবং *তারপর* এটি edit করেন, **ইনপুট আপডেট হয় কিন্তু নীচের লেবেলটি edit গুলিকে প্রতিফলিত করে না।** এর কারণ হল আপনি স্টেট duplicated করেছেন , এবং আপনি ভুলে গেছেন `selectedItem` আপডেট করতে।
 
 Although you could update `selectedItem` too, an easier fix is to remove duplication. In this example, instead of a `selectedItem` object (which creates a duplication with objects inside `items`), you hold the `selectedId` in state, and *then* get the `selectedItem` by searching the `items` array for an item with that ID:
 
